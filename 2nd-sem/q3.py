@@ -23,9 +23,22 @@ for sibling in rules_heading.find_next_siblings():
             content_in_rules += str(sibling)
         
 
+# Wrap content in basic HTML structure
+html_content = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chess Rules</title>
+</head>
+<body>
+    <h1>Rules of Chess</h1>
+    {content_in_rules}
+</body>
+</html>
+"""
 
+# write/save this custom html to a file
+with open("chess_rules.html", "w") as file:
+     file.write(html_content)
 
-
-
-
-
+print("Custom HTML file created with chess fules from wikipedia as 'chess_rules.html'.")
