@@ -1,58 +1,31 @@
-from bs4 import BeautifulSoup
+""" 
+scrape the wikipedia page for chess. Using for example an Xpath expression, search for the "Rules" section. Create a custom html
+with a template for the scraped content
+"""
+
 import requests
+from bs4 import BeautifulSoup
 
-def scrape_recipes(section_title):
+url = f"https://en.wikipedia.org/wiki/Chess"
+response = requests.get(url)
+soup = BeautifulSoup(response.content, "html.parser") # parse html content
 
-    url = f"wikipedia_url"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, "html.parser") # parse html content
-
-    if response.status_code != 200:
-        return f"Error: Unable to fetch page, status code {response.status_code}"
+if response.status_code != 200:
+    print(f"Error: Unable to fetch page, status code {response.status_code}")
     
-    header = soup.find(id=section_title.replace(" ", "_"))
     
-    content = []
-    for sibling in header.find_next_siblings():
+rules_heading = soup.find(id="Rules")
+content_in_rules = ""
+for sibling in rules_heading.find_next_siblings():
         if sibling.name == "h2":  # Stop if we reach the next section
             break
-        content.append(str(sibling))
-    # abc = soup.find_all("a", class_="block md:hover:opacity")
-
-    section_content = "\n".join(content)
-    
-    return section_content
-
-
-
-# url =
-section_title = "Techniques"
-section_content = scrape_wikipedia_section(url, section_title)
-
-print(section_content)
+        if sibling.name == "p":
+            content_in_rules += str(sibling)
+        
 
 
 
 
-""" 
 
-# Wrap content in basic HTML structure
-    html_content = f"""
-    <html>
-    <head>
-        <title>{section_title}</title>
-    </head>
-    <body>
-        <h1>{section_title}</h1>
-        {section_content}
-    </body>
-    </html>
-    """
 
-    # Save the content to an HTML file
-    with open(output_file, 'w', encoding='utf-8') as file:
-        file.write(html_content)
 
-    print(f"Content saved to {output_file}")
-    
-"""
